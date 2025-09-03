@@ -1,7 +1,7 @@
 import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto, UpdateUserDtoPatch } from './dto/user.dto';
+import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
-import { FindOptionsOrder, FindOptionsWhere, ILike, Like, Repository } from 'typeorm';
+import { FindOptionsOrder, FindOptionsWhere, ILike, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { hash } from "bcrypt";
 
@@ -42,42 +42,20 @@ export class UsersService {
     return this.userRepository.find({ select: this.selection });
   }
 
-  public async findAllByFilters(
-    nombre?: string,
-    correo?: string,
-    fecha?: string
-  ): Promise<User[]> {
-    console.log('Filtros recibidos:', { nombre, correo, fecha }); // Debug
+  public async findAllByFilters(nombre?: string, correo?: string, fecha?: string): Promise<User[]> {
     const where: FindOptionsWhere<User> = {};
-
-    if (nombre) {
-      where.name = ILike(`%${nombre}%`);
-      console.log('Filtro nombre aplicado:', where.name); // Debug
-    }
-
-    if (correo) {
-      where.email = ILike(`%${correo}%`);
-      console.log('Filtro correo aplicado:', where.email); // Debug
-    }
-
-    if (fecha) {
-      // Para búsqueda por fecha (ajusta según tu base de datos)
-      where.createdAt = new Date(fecha);
-      console.log('Filtro fecha aplicado:', where.createdAt); // Debug
-    }
-
-    console.log('Condición WHERE final:', where); // Debug
-
-    return this.userRepository.find({
-      where,
-      order: { createdAt: 'DESC' }
-    });
+    if (nombre) { where.name = ILike(`%${nombre}%`); }
+    if (correo) { where.email = ILike(`%${correo}%`); }
+    if (fecha) { where.createdAt = new Date(fecha); }
+    return this.userRepository.find({ where, order: { createdAt: 'DESC' } });
   }
 
   public findAllByPagination(page: number, limit: number, sort: 'nombre' | 'correo' | 'fecha'): Promise<User[]> {
-    const order: FindOptionsOrder<User> = sort === 'nombre' ? { name: 'ASC' } : sort === 'correo' ? { email: 'ASC' } : { createdAt: 'ASC' }
-    if (page <= 0) { throw new BadRequestException('pagina no valida'); }
-    return this.userRepository.find({ select: this.selection, take: limit, skip: (page * limit), order });
+    const orders: { [key: string]: FindOptionsOrder<User> } = { 'nombre': { name: 'ASC' }, 'correo': { email: 'ASC' }, 'fecha': { createdAt: 'ASC' } };
+    const order: FindOptionsOrder<User> | null = orders[sort] || null;
+    if (order === null) { throw new BadRequestException('Ordenación no valida, debe ser: nombre, correo o fecha'); }
+    if (page <= 0) { throw new BadRequestException('pagina no valida, debe ser mayor que cero'); }
+    return this.userRepository.find({ select: this.selection, take: limit, skip: ((page - 1) * limit), order });
   }
 
   public async findOne(id: string): Promise<User> {
@@ -90,7 +68,7 @@ export class UsersService {
     return this.userRepository.findOne({ where: { email }, select: ['id', 'email', 'name', 'role'] });
   }
 
-  public async update(id: string, updateUserDto: UpdateUserDtoPatch): Promise<string> {
+  public async update(id: string, updateUserDto: UpdateUserDto): Promise<string> {
     await this.findOne(id);
     await this.userRepository.update({ id }, updateUserDto);
     return 'Usuario actualizado correctamente';

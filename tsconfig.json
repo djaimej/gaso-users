@@ -22,18 +22,15 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "paths": {
+      "@auth/*": [ "src/auth/*" ],
       "@common/*": [ "src/common/*" ],
       "@config/*": [ "src/config/*" ],
       "@database/*": [ "src/database/*" ],
       "@decorators/*": [ "src/decorators/*" ],
+      "@middlewares/*": [ "src/middlewares/*" ],
       "@resources/*": [ "src/resources/*" ],
-      "@entities/*": [ "src/resources/*" ],
-      "@filters/*": [ "src/middlewares/filters/*" ],
+      "@strategies/*": [ "src/strategies/*" ],
       "@gateways/*": [ "src/gateways/*" ],
-      "@guards/*": [ "src/middlewares/guards/*" ],
-      "@interceptors/*": [ "src/middlewares/interceptors/*" ],
-      "@auth/*": [ "src/auth/*" ],
-      "@strategies/*": [ "src/strategies/*" ]
     }
   }
 }

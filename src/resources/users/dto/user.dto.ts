@@ -27,7 +27,7 @@ export class CreateUserDto {
     readonly role: Role;
 }
 
-export class UpdateUserDtoPatch extends PartialType(CreateUserDto) {}
+export class UpdateUserDto extends PartialType(CreateUserDto) {}
 
 export class UpdatePasswordDto {
     @IsString()
