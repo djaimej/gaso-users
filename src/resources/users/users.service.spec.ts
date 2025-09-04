@@ -54,7 +54,7 @@ describe('UsersService', () => {
   });
 
   describe('verifyAndCreate', () => {
-    it('should verify and create a user successfully', async () => {
+    it('Debe verificar y crear un usuario exitosamente', async () => {
       const createUserDto: CreateUserDto = {
         name: 'Test User',
         email: 'test@example.com',
@@ -62,23 +62,25 @@ describe('UsersService', () => {
         role: Role.USER,
       };
 
-      jest.spyOn(service, 'findOneByEmail').mockResolvedValue(null);
+      jest.spyOn(service, 'findForAuthentication').mockResolvedValue(null);
       (bcrypt.hash as jest.Mock).mockResolvedValue('hashedPassword');
       jest.spyOn(service, 'create').mockResolvedValue(mockUser as User);
 
       const result = await service.verifyAndCreate(createUserDto);
 
-      expect(service.findOneByEmail).toHaveBeenCalledWith(createUserDto.email);
+      expect(service.findForAuthentication).toHaveBeenCalledWith(createUserDto.email);
       expect(bcrypt.hash).toHaveBeenCalledWith(createUserDto.password, 10);
       expect(result).toEqual({
         id: mockUser.id,
         name: mockUser.name,
         email: mockUser.email,
         createdAt: mockUser.createdAt,
+        role: mockUser.role,
+        updatedAt: mockUser.updatedAt
       });
     });
 
-    it('should throw ConflictException if email already exists', async () => {
+    it('Debe lanzar ConflictException si el correo electrónico ya existe', async () => {
       const createUserDto: CreateUserDto = {
         name: 'Test User',
         email: 'existing@example.com',
@@ -86,7 +88,7 @@ describe('UsersService', () => {
         role: Role.USER,
       };
 
-      jest.spyOn(service, 'findOneByEmail').mockResolvedValue(mockUser as User);
+      jest.spyOn(service, 'findForAuthentication').mockResolvedValue(mockUser as User);
 
       await expect(service.verifyAndCreate(createUserDto)).rejects.toThrow(
         ConflictException,
@@ -95,7 +97,7 @@ describe('UsersService', () => {
   });
 
   describe('findAll', () => {
-    it('should return all users', async () => {
+    it('Debe devolver todos los usuarios', async () => {
       const users = [mockUser, mockUser];
       mockUserRepository.find.mockResolvedValue(users);
 
@@ -109,7 +111,7 @@ describe('UsersService', () => {
   });
 
   describe('findAllByFilters', () => {
-    it('should return users filtered by name', async () => {
+    it('Debe devolver los usuarios filtrados por nombre.', async () => {
       const users = [mockUser];
       mockUserRepository.find.mockResolvedValue(users);
 
@@ -118,11 +120,12 @@ describe('UsersService', () => {
       expect(mockUserRepository.find).toHaveBeenCalledWith({
         where: { name: expect.any(Object) },
         order: { createdAt: 'DESC' },
+        select: service['selection'], // Añadir esta línea
       });
       expect(result).toEqual(users);
     });
 
-    it('should return users filtered by email', async () => {
+    it('Debe devolver los usuarios filtrados por correo electrónico.', async () => {
       const users = [mockUser];
       mockUserRepository.find.mockResolvedValue(users);
 
@@ -131,11 +134,12 @@ describe('UsersService', () => {
       expect(mockUserRepository.find).toHaveBeenCalledWith({
         where: { email: expect.any(Object) },
         order: { createdAt: 'DESC' },
+        select: service['selection'], // Añadir esta línea
       });
       expect(result).toEqual(users);
     });
 
-    it('should return users filtered by date', async () => {
+    it('Debe devolver los usuarios filtrados por fecha.', async () => {
       const users = [mockUser];
       mockUserRepository.find.mockResolvedValue(users);
       const date = '2023-01-01';
@@ -145,14 +149,14 @@ describe('UsersService', () => {
       expect(mockUserRepository.find).toHaveBeenCalledWith({
         where: { createdAt: new Date(date) },
         order: { createdAt: 'DESC' },
+        select: service['selection'], // Añadir esta línea
       });
       expect(result).toEqual(users);
     });
   });
 
-
   describe('findAllByPagination', () => {
-    it('should return paginated users ordered by name', async () => {
+    it('Debe devolver usuarios paginados ordenados por nombre.', async () => {
       const users = [mockUser];
       mockUserRepository.find.mockResolvedValue(users);
 
@@ -167,18 +171,18 @@ describe('UsersService', () => {
       expect(result).toEqual(users);
     });
 
-    it('should throw BadRequestException if page <= 0', () => {
+    it('Debe lanzar BadRequestException si la página <= 0', () => {
       expect(() => service.findAllByPagination(0, 10, 'nombre')).toThrow(BadRequestException);
     });
 
-    it('should throw BadRequestException if sort is invalid', () => {
+    it('Debe lanzar BadRequestException si la clasificación no es válida', () => {
       expect(() => service.findAllByPagination(1, 10, 'otro' as any)).toThrow(BadRequestException);
     });
 
   });
 
   describe('findOne', () => {
-    it('should return a user by id', async () => {
+    it('Debe devolver un usuario por id', async () => {
       mockUserRepository.findOne.mockResolvedValue(mockUser);
 
       const result = await service.findOne('1');
@@ -190,7 +194,7 @@ describe('UsersService', () => {
       expect(result).toEqual(mockUser);
     });
 
-    it('should throw NotFoundException if user not found', async () => {
+    it('Debe lanzar NotFoundException si el usuario no se encuentra', async () => {
       mockUserRepository.findOne.mockResolvedValue(null);
 
       await expect(service.findOne('999')).rejects.toThrow(NotFoundException);
@@ -198,7 +202,7 @@ describe('UsersService', () => {
   });
 
   describe('update', () => {
-    it('should update a user successfully', async () => {
+    it('Debe actualizar un usuario con éxito', async () => {
       const updateUserDto: UpdateUserDto = { name: 'Updated Name' };
 
       jest.spyOn(service, 'findOne').mockResolvedValue(mockUser as User);
@@ -213,7 +217,7 @@ describe('UsersService', () => {
   });
 
   describe('remove', () => {
-    it('should remove a user successfully', async () => {
+    it('Debe eliminar un usuario con éxito', async () => {
       jest.spyOn(service, 'findOne').mockResolvedValue(mockUser as User);
       mockUserRepository.delete.mockResolvedValue({ affected: 1 });
 

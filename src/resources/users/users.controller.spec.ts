@@ -4,10 +4,12 @@ import { UsersService } from './users.service';
 import { CreateUserDto, UpdateUserDto, FilterUsersDto } from './dto/user.dto';
 import { User } from './entities/user.entity';
 import { Role } from '@common/enums/role.enum';
+import { BadRequestException, ValidationPipe } from '@nestjs/common';
 
 describe('UsersController', () => {
   let controller: UsersController;
   let service: UsersService;
+  let validationPipe: ValidationPipe;
 
   const mockUser: Partial<User> = { id: '1', name: 'Test User', email: 'test@example.com' };
 
@@ -28,18 +30,33 @@ describe('UsersController', () => {
 
     controller = module.get<UsersController>(UsersController);
     service = module.get<UsersService>(UsersService);
+    
+    validationPipe = new ValidationPipe({ whitelist: true });
   });
 
   afterEach(() => {
     jest.clearAllMocks();
   });
 
-  it('should be defined', () => {
+  it('Debe estar definido', () => {
     expect(controller).toBeDefined();
   });
 
+  it('Debe validar DTO en el método de creación.', async () => {
+    const invalidDto: CreateUserDto = {
+      name: 'Test User', email: 'test@example.com', password: '1234', role: Role.ADMIN,
+    };
+
+    try {
+      await validationPipe.transform(invalidDto, { type: 'body', metatype: CreateUserDto });
+      fail('Debe retornar un error de validación');
+    } catch (error) {
+      expect(error).toBeInstanceOf(BadRequestException);
+    }
+  });
+
   describe('create', () => {
-    it('should create a user', async () => {
+    it('Debería crear un usuario', async () => {
       const dto: CreateUserDto = { name: 'User', email: 'u@test.com', password: '1234', role: Role.ADMIN };
       mockService.verifyAndCreate.mockResolvedValue(mockUser);
       const result = await controller.create(dto);
@@ -48,7 +65,7 @@ describe('UsersController', () => {
   });
 
   describe('findAllByFilters', () => {
-    it('should return users', async () => {
+    it('Debe devolver los usuarios', async () => {
       const dto: FilterUsersDto = { nombre: 'Test' } as any;
       mockService.findAllByFilters.mockResolvedValue([mockUser]);
       const result = await controller.findAllByFilters(dto);
@@ -57,7 +74,7 @@ describe('UsersController', () => {
   });
 
   describe('findAllPagination', () => {
-    it('should return paginated users', async () => {
+    it('Debe devolver usuarios paginados', async () => {
       mockService.findAllByPagination.mockResolvedValue([mockUser]);
       const result = await controller.findAllPagination(1, 10, 'nombre');
       expect(result).toEqual([mockUser]);
@@ -65,7 +82,7 @@ describe('UsersController', () => {
   });
 
   describe('updateById', () => {
-    it('should update user', async () => {
+    it('Debe actualizar el usuario', async () => {
       const dto: CreateUserDto = { name: 'Updated', email: 'u@test.com', password: '1234', role: Role.ADMIN };
       mockService.update.mockResolvedValue('Usuario actualizado correctamente');
       const result = await controller.updateById('1', dto);
@@ -74,7 +91,7 @@ describe('UsersController', () => {
   });
 
   describe('findOne', () => {
-    it('should return current user', async () => {
+    it('Debe devolver el usuario actual', async () => {
       mockService.findOne.mockResolvedValue(mockUser);
       const req = { user: { id: '1' } };
       const result = await controller.findOne(req as any);
@@ -83,7 +100,7 @@ describe('UsersController', () => {
   });
 
   describe('findOneById', () => {
-    it('should return user by id', async () => {
+    it('Debe devolver el usuario por id', async () => {
       mockService.findOne.mockResolvedValue(mockUser);
       const result = await controller.findOneById('1');
       expect(result).toEqual(mockUser);
@@ -91,7 +108,7 @@ describe('UsersController', () => {
   });
 
   describe('updatePartial', () => {
-    it('should update partial user', async () => {
+    it('Debe actualizar el usuario parcial', async () => {
       const dto: UpdateUserDto = { name: 'Partial' };
       mockService.update.mockResolvedValue('Usuario actualizado correctamente');
       const req = { user: { id: '1' } };
@@ -101,7 +118,7 @@ describe('UsersController', () => {
   });
 
   describe('updatePartialById', () => {
-    it('should update partial user by id', async () => {
+    it('Debe actualizar el usuario parcial por id', async () => {
       const dto: UpdateUserDto = { name: 'Partial' };
       mockService.update.mockResolvedValue('Usuario actualizado correctamente');
       const result = await controller.updatePartialById('1', dto);
@@ -110,7 +127,7 @@ describe('UsersController', () => {
   });
 
   describe('remove', () => {
-    it('should remove user', async () => {
+    it('Debe eliminar al usuario', async () => {
       mockService.remove.mockResolvedValue('Usuario eliminado correctamente');
       const result = await controller.remove('1');
       expect(result).toEqual('Usuario eliminado correctamente');

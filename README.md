@@ -88,13 +88,13 @@ $ npm run start:prod
 
 Para acceder a la documentación visitar [Swagger API Docs](http://localhost:3000/api-docs) de forma local o formar la url a partir de la dirección IP o dominio del servidor donde se esta ejecutando la API más la ruta /api-docs
 
-## Realizar pruebas básicas de la API.
+## Realizar pruebas Básicas y Integración de la API.
 
 ```bash
 # Ejecutar pruebas unitarias
 $ npm run test
 
-# pruebas e2e
+# pruebas e2e (Pruebas de Integración)
 $ npm run test:e2e
 
 # Ejecutar pruebas con cobertura

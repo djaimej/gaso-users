@@ -1,9 +1,24 @@
 {
-  "moduleFileExtensions": ["js", "json", "ts"],
-  "rootDir": ".",
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "ts"
+  ],
+  "rootDir": "..",
   "testEnvironment": "node",
   "testRegex": ".e2e-spec.ts$",
   "transform": {
     "^.+\\.(t|j)s$": "ts-jest"
+  },
+  "moduleNameMapper": {
+    "^@common/(.*)$": "<rootDir>/src/common/$1",
+    "^@decorators/(.*)$": "<rootDir>/src/decorators/$1",
+    "^@middlewares/(.*)$": "<rootDir>/src/middlewares/$1",
+    "^@resources/(.*)$": "<rootDir>/src/resources/$1",
+    "^@auth/(.*)$": "<rootDir>/src/auth/$1",
+    "^@config/(.*)$": "<rootDir>/src/config/$1",
+    "^@database/(.*)$": "<rootDir>/src/database/$1",
+    "^@strategies/(.*)$": "<rootDir>/src/strategies/$1",
+    "^@gateways/(.*)$": "<rootDir>/src/gateways/$1"
   }
 }

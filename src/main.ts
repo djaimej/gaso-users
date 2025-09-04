@@ -22,12 +22,8 @@ async function bootstrap() {
 
   const document = SwaggerModule.createDocument(app, config);
 
-  SwaggerModule.setup('api-docs', app, document, {
-    swaggerOptions: {
-      persistAuthorization: true,
-    },
-  });
-  
+  SwaggerModule.setup('api-docs', app, document, { swaggerOptions: { persistAuthorization: true } });
+
   /* HELMET */
   app.use(helmet({
     crossOriginEmbedderPolicy: false,
@@ -41,19 +37,22 @@ async function bootstrap() {
     },
   }));
 
-  app.useGlobalPipes(new ValidationPipe({
-    whitelist: true,
-    forbidUnknownValues: true,
-    transform: true,
-    transformOptions: {
-      enableImplicitConversion: true,
-    },
-  }));
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidUnknownValues: true,
+      transform: true,
+      transformOptions: {
+        enableImplicitConversion: true,
+      },
+    })
+  );
 
   app.use((request: Request, response: Response, next: NextFunction) => {
     // response.setHeader('Access-Control-Allow-Origin', '*');
     next();
   });
+  
   await app.listen(process.env[ConfigurationEnum.PORT] ?? 3000);
 }
 bootstrap();

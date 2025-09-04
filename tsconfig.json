@@ -30,7 +30,7 @@
       "@middlewares/*": [ "src/middlewares/*" ],
       "@resources/*": [ "src/resources/*" ],
       "@strategies/*": [ "src/strategies/*" ],
-      "@gateways/*": [ "src/gateways/*" ],
+      "@gateways/*": [ "src/gateways/*" ]
     }
   }
 }
