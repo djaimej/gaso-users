@@ -1,15 +1,21 @@
-import { Body, Controller, Param, Post } from '@nestjs/common';
-import { Public } from '@decorators/public.decorator';
-import { AuthService } from './auth.service';
-import { LogInDto } from './dto/login.dto';
-import { SignInDto, SignUpDto } from './dto/sign.dto';
-import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Get, InternalServerErrorException, Param, Post, Req, Res } from "@nestjs/common";
+import express from "express";
+import { Public } from "@decorators/public.decorator";
+import { AuthService } from "./auth.service";
+import { LogInDto } from "./dto/login.dto";
+import { SignInDto, SignUpDto } from "./dto/sign.dto";
+import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { generateCsrfToken } from "@middlewares/csrf.middleware";
+import { ConfigService } from "@nestjs/config";
 
 @Public()
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-    constructor(private readonly authService: AuthService) { }
+    constructor(
+        private readonly authService: AuthService,
+        private readonly configService: ConfigService
+    ) { }
 
     /**
      * Inicio de sesión
@@ -45,4 +51,18 @@ export class AuthController {
     async registerAdmin(@Body() signUpDto: SignUpDto, @Param('secret') secret: string): Promise<LogInDto> {
         return await this.authService.registerAdmin(signUpDto, secret);
     }
+
+    @Get('csrf-token')
+    @ApiOperation({ summary: 'Obtener token CSRF', description: 'Genera un token CSRF para protección contra ataques' })
+    @ApiResponse({ status: 200, description: 'Token CSRF generado exitosamente' })
+    @ApiResponse({ status: 500, description: 'Error interno del servidor' })
+    getCsrfToken(@Req() req: express.Request, @Res({ passthrough: true }) res: express.Response) {
+        try {
+            const token = generateCsrfToken(req, res);
+            return { csrfToken: token };
+        } catch (error) {
+            throw new InternalServerErrorException('Error generando token CSRF');
+        }
+    }
+
 }

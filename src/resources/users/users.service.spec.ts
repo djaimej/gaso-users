@@ -6,11 +6,9 @@ import { Repository } from 'typeorm';
 import { BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
 import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
 import { Role } from '@common/enums/role.enum';
-import * as bcrypt from 'bcrypt';
+import bcrypt from 'bcrypt';
 
-jest.mock('bcrypt', () => ({
-  hash: jest.fn(),
-}));
+jest.mock('bcrypt', () => ({ hash: jest.fn() }));
 
 describe('UsersService', () => {
   let service: UsersService;

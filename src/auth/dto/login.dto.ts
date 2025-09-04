@@ -12,10 +12,6 @@ export class LogInDto {
     @IsString()
     @ApiProperty({ description: 'Token de autenticación JWT' })
     readonly token: string;
-    
-    @Expose()
-    @IsString()
-    readonly csrf: string; /* Para ataques XSS */
 
     @Expose()
     @ApiProperty({ description: 'Datos del usuario autenticado' })

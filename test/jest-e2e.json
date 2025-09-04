@@ -13,6 +13,9 @@
   "moduleNameMapper": {
     "^@common/(.*)$": "<rootDir>/src/common/$1",
     "^@decorators/(.*)$": "<rootDir>/src/decorators/$1",
+    "^@filters/(.*)$": "<rootDir>/src/filters/$1",
+    "^@guards/(.*)$": "<rootDir>/src/guards/$1",
+    "^@interceptors/(.*)$": "<rootDir>/src/interceptors/$1",
     "^@middlewares/(.*)$": "<rootDir>/src/middlewares/$1",
     "^@resources/(.*)$": "<rootDir>/src/resources/$1",
     "^@auth/(.*)$": "<rootDir>/src/auth/$1",

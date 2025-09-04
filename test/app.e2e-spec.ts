@@ -9,6 +9,12 @@ import { LogInDto } from '@auth/dto/login.dto';
 import { Role } from '@common/enums/role.enum';
 import { UserResponseDto } from '@resources/users/dto/user.dto';
 
+/* 
+  IMPORTANTE: Antes de ejecutar estas pruebas es necesario especificar el entorno a testing en .env 
+  NODE_ENV=testing
+  esto saltara la parte de XSRF
+*/
+
 describe('App Pruebas de integración', () => {
   let app: INestApplication<App>;
   let authToken: string;

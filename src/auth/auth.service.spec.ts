@@ -14,9 +14,7 @@ import { ConfigurationEnum } from '@config/config.enum';
 
 // Mocks
 
-jest.mock('./dto/login.dto', () => ({
-  LogInDto: jest.fn().mockImplementation((data) => data),
-}));
+jest.mock('./dto/login.dto', () => ({ LogInDto: jest.fn().mockImplementation((data) => data) }));
 
 jest.mock('./dto/sign.dto', () => ({
   SignInDto: jest.fn().mockImplementation((data) => data),
@@ -40,13 +38,9 @@ jest.mock('class-validator', () => ({
   IsDateString: jest.fn(() => () => { }),
 }));
 
-jest.mock('bcrypt', () => ({
-  compare: jest.fn(),
-}));
+jest.mock('bcrypt', () => ({ compare: jest.fn() }));
 
-jest.mock('class-transformer', () => ({
-  plainToClass: jest.fn(),
-}));
+jest.mock('class-transformer', () => ({ plainToClass: jest.fn() }));
 
 describe('AuthService', () => {
   let authService: AuthService;
@@ -71,7 +65,6 @@ describe('AuthService', () => {
 
   const mockLoginDto: LogInDto = {
     token: 'jwt-token',
-    csrf: '',
     user: {
       id: '1',
       name: 'Test User',
@@ -81,9 +74,7 @@ describe('AuthService', () => {
     },
   };
 
-  const mockJwtService = {
-    sign: jest.fn(),
-  };
+  const mockJwtService = { sign: jest.fn() };
 
   const mockUsersService = {
     verifyEmailAndHashPassword: jest.fn(),
@@ -91,9 +82,7 @@ describe('AuthService', () => {
     findForAuthentication: jest.fn(),
   };
 
-  const mockConfigService = {
-    get: jest.fn(),
-  };
+  const mockConfigService = { get: jest.fn() };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({

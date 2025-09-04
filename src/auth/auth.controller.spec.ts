@@ -4,22 +4,27 @@ import { AuthService } from './auth.service';
 import { LogInDto } from './dto/login.dto';
 import { SignInDto, SignUpDto } from './dto/sign.dto';
 import { Role } from '@common/enums/role.enum';
+import { ConfigService } from '@nestjs/config';
+import { InternalServerErrorException } from '@nestjs/common';
+import { generateCsrfToken } from '@middlewares/csrf.middleware';
+
+jest.mock('@middlewares/csrf.middleware', () => ({ generateCsrfToken: jest.fn() }));
 
 describe('AuthController', () => {
   let controller: AuthController;
   let service: AuthService;
 
-  const mockLogIn: LogInDto = { csrf: '', token: 'your-token', user: { id: '1', name: 'Test User', email: 'test@example.com', role: Role.USER, iat: 12 } };
-  const mockService = {
-    signIn: jest.fn(),
-    signUp: jest.fn(),
-    registerAdmin: jest.fn(),
-  };
+  const mockLogIn: LogInDto = { token: 'your-token', user: { id: '1', name: 'Test User', email: 'test@example.com', role: Role.USER, iat: 12 } };
+  const mockService = { signIn: jest.fn(), signUp: jest.fn(), registerAdmin: jest.fn() };
+  const mockConfigService = { get: jest.fn(), };
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [AuthController],
-      providers: [{ provide: AuthService, useValue: mockService }],
+      providers: [
+        { provide: AuthService, useValue: mockService },
+        { provide: ConfigService, useValue: mockConfigService },
+      ],
     }).compile();
 
     controller = module.get<AuthController>(AuthController);
@@ -40,6 +45,7 @@ describe('AuthController', () => {
       mockService.signIn.mockResolvedValue(mockLogIn);
       const result: LogInDto = await controller.signIn(dto);
       expect(result).toEqual(mockLogIn);
+      expect(service.signIn).toHaveBeenCalledWith(dto);
     });
   });
 
@@ -49,6 +55,7 @@ describe('AuthController', () => {
       mockService.signUp.mockResolvedValue(mockLogIn);
       const result: LogInDto = await controller.signUp(dto);
       expect(result).toEqual(mockLogIn);
+      expect(service.signUp).toHaveBeenCalledWith(dto);
     });
   });
 
@@ -58,8 +65,8 @@ describe('AuthController', () => {
       const secretKey = 'VIESSEP052025';
       mockService.registerAdmin.mockResolvedValue(mockLogIn);
       const result: LogInDto = await controller.registerAdmin(dto, secretKey);
-      expect(service.registerAdmin).toHaveBeenCalledWith(dto, secretKey);
       expect(result).toEqual(mockLogIn);
+      expect(service.registerAdmin).toHaveBeenCalledWith(dto, secretKey);
     });
 
     it('Debería generar un error por una clave secreta no válida', async () => {
@@ -67,7 +74,34 @@ describe('AuthController', () => {
       const invalidSecretKey = 'INVALID_KEY';
       mockService.registerAdmin.mockRejectedValue(new Error('Invalid secret key'));
       await expect(controller.registerAdmin(dto, invalidSecretKey)).rejects.toThrow('Invalid secret key');
+      expect(service.registerAdmin).toHaveBeenCalledWith(dto, invalidSecretKey);
     });
   });
 
+  describe('csrf-token', () => {
+    it('Debería generar un token CSRF exitosamente', () => {
+      const mockRequest = { session: {}, sessionID: 'test-session-id' } as any;
+      const mockResponse = { cookie: jest.fn() } as any;
+
+      (generateCsrfToken as jest.Mock).mockReturnValue('test-csrf-token');
+
+      const result = controller.getCsrfToken(mockRequest, mockResponse);
+
+      expect(result).toEqual({ csrfToken: 'test-csrf-token' });
+      expect(generateCsrfToken).toHaveBeenCalledWith(mockRequest, mockResponse);
+    });
+
+    it('Debería lanzar error si falla la generación del token CSRF', () => {
+      const mockRequest = { session: {}, sessionID: 'test-session-id' } as any;
+      const mockResponse = { cookie: jest.fn() } as any;
+
+      (generateCsrfToken as jest.Mock).mockImplementation(() => {
+        throw new Error('CSRF generation failed');
+      });
+
+      expect(() => {
+        controller.getCsrfToken(mockRequest, mockResponse);
+      }).toThrow(InternalServerErrorException);
+    });
+  });
 });
