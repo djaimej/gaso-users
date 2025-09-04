@@ -1,12 +1,15 @@
 export enum ConfigurationEnum {
-    PORT = 'PORT',
     HOST = 'HOST',
-    DATABASE_TYPE = 'postgres',
+    PORT = 'PORT',
+    DATABASE = 'POSTGRES_DB',
     DATABASE_PORT = 'POSTGRES_PORT',
     DATABASE_HOST = 'POSTGRES_HOST',
     DATABASE_USER = 'POSTGRES_USER',
     DATABASE_PASSWORD = 'POSTGRES_PASSWORD',
-    DATABASE = 'POSTGRES_DB',
     JWT_SECRET = 'JWT_SECRET',
     ADM_SECRET = 'ADM_SECRET',
+    NODE_ENV = 'NODE_ENV', // development | production | testing
+    FRONTEND_URL = 'FRONTEND_URL',
+    SESSION_SECRET = 'SESSION_SECRET',
+    COOKIE_SECRET = 'COOKIE_SECRET',
 }

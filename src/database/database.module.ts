@@ -9,7 +9,7 @@ import { ConfigurationEnum } from '@config/config.enum';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
-        type: ConfigurationEnum.DATABASE_TYPE,
+        type: 'postgres',
         host: configService.get(ConfigurationEnum.DATABASE_HOST),
         port: configService.get(ConfigurationEnum.DATABASE_PORT),
         username: configService.get(ConfigurationEnum.DATABASE_USER),
