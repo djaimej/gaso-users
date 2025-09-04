@@ -25,38 +25,6 @@
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository. API RESTful para Gestión de Usuarios
 
-## Project setup
-
-```bash
-$ npm install
-```
-
-## Compile and run the project
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
@@ -96,3 +64,45 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+
+## Instalar dependencias.
+
+```bash
+$ npm install
+```
+
+## Ejecutar el servidor localmente.
+
+```bash
+# desarrollo
+$ npm run start
+
+# modo watch
+$ npm run start:dev
+
+# modo producción
+$ npm run start:prod
+```
+
+## Acceder a la documentación Swagger.
+
+Para acceder a la documentación visitar [Swagger API Docs](http://localhost:3000/api-docs) de forma local o formar la url a partir de la dirección IP o dominio del servidor donde se esta ejecutando la API más la ruta /api-docs
+
+## Realizar pruebas Básicas y Integración de la API.
+
+```bash
+# Ejecutar pruebas unitarias
+$ npm run test
+
+# pruebas e2e (Pruebas de Integración)
+$ npm run test:e2e
+
+# Ejecutar pruebas con cobertura
+npm run test:cov
+
+# Ejecutar pruebas específicas
+npm test -- users.service.spec.ts
+
+# Ejecutar en modo watch
+npm run test:watch
+```

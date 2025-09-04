@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException, UnauthorizedException, BadRequestException, ImATeapotException, ForbiddenException } from '@nestjs/common';
 import { JwtService } from "@nestjs/jwt";
-import { CreateUserDto } from "@resources/users/dto/user.dto";
+import { CreateUserDto, UserWithPasswordDto } from "@resources/users/dto/user.dto";
 import { User } from "@resources/users/entities/user.entity";
 import { LogInDto } from "./dto/login.dto";
 import { plainToClass } from "class-transformer";
@@ -25,9 +25,9 @@ export class AuthService {
      */
     public async registerAdmin(signUpDto: SignUpDto, secret: string): Promise<LogInDto> {
         const admSecret = this.configService.get(ConfigurationEnum.ADM_SECRET);
-        if(secret !== admSecret) {
+        if (secret !== admSecret) {
             // enviar error sin mucha información (El tipo de error puede variar)
-            throw [new ImATeapotException(), new UnauthorizedException(), new BadRequestException(), new ForbiddenException()][Math.floor(Math.random() * 4)] 
+            throw [new ImATeapotException(), new UnauthorizedException(), new BadRequestException(), new ForbiddenException()][Math.floor(Math.random() * 4)]
         }
         const { name, email, password } = signUpDto;
         const hashedPassword: string = await this.usersService.verifyEmailAndHashPassword(email, password);
@@ -53,14 +53,14 @@ export class AuthService {
      */
     public async signIn(loginDto: SignInDto): Promise<LogInDto> {
         const { email, password } = loginDto;
-        const user: User | null = await this.usersService.findOneByEmail(email);
+        const user: UserWithPasswordDto | null = await this.usersService.findForAuthentication(email);
         if (!user) { throw new NotFoundException("Usuario no encontrado"); }
         const isMatch: boolean = await compare(password, user.password);
         if (!isMatch) { throw new UnauthorizedException("La contraseña es incorrecta"); }
         return this.getLoginDto(user);
     }
 
-    private getLoginDto(user: User): LogInDto {
+    private getLoginDto(user: User | UserWithPasswordDto): LogInDto {
         const payload: IAccessTokenPayload = { id: user.id, name: user.name, role: user.role, email: user.email, iat: new Date().getTime() }
         const token: string = this.jwtService.sign(payload);
         return plainToClass(LogInDto, { token, user: payload });

@@ -4,8 +4,6 @@ import { AuthService } from './auth.service';
 import { LogInDto } from './dto/login.dto';
 import { SignInDto, SignUpDto } from './dto/sign.dto';
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { User } from '@decorators/user.decorator';
-import { CreateUserDto } from '@resources/users/dto/user.dto';
 
 @Public()
 @ApiTags('auth')

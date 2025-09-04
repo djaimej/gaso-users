@@ -1,5 +1,7 @@
 import { IsString } from 'class-validator';
 import { Expose, Exclude } from 'class-transformer';
+import type { IAccessTokenPayload } from '@common/interfaces/access-token-payload.interface';
+import { ApiProperty } from '@nestjs/swagger';
 
 /**
  * Datos del usuario de registro o inicio de sesión
@@ -8,13 +10,14 @@ import { Expose, Exclude } from 'class-transformer';
 export class LogInDto {
     @Expose()
     @IsString()
-    token: string;
+    @ApiProperty({ description: 'Token de autenticación JWT' })
+    readonly token: string;
     
     @Expose()
     @IsString()
-    csrf: string; /* Para ataque XSS */
+    readonly csrf: string; /* Para ataques XSS */
 
     @Expose()
-    @IsString()
-    user: string;
+    @ApiProperty({ description: 'Datos del usuario autenticado' })
+    readonly user: IAccessTokenPayload;
 }

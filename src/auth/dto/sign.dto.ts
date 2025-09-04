@@ -9,7 +9,7 @@ export class SignInDto {
     @IsNotEmpty()
     @IsEmail({ require_display_name: false }, { message: 'El correo no es valido' })
     @ApiProperty({ description: 'El correo electrónico', default: 'john@doe.com', pattern: '<mail>@<domain>.<ext>' })
-    readonly email: string;
+    email: string;
 
     @IsString()
     @IsNotEmpty()
@@ -18,7 +18,7 @@ export class SignInDto {
         message: 'La contraseña debe tener al menos una mayúscula, una minúscula y un símbolo'
     })
     @ApiProperty({ description: 'La contraseña', pattern: 'pass[a-z][A-Z]#{4}' })
-    readonly password: string;
+    password: string;
 }
 
 /**
@@ -29,13 +29,13 @@ export class SignUpDto {
     @IsNotEmpty()
     @IsEmail({ require_display_name: false }, { message: 'El correo no es valido' })
     @ApiProperty({ description: 'El correo electrónico', default: 'john@doe.com', pattern: '<mail>@<domain>.<ext>' })
-    readonly email: string;
+    email: string;
 
     @IsString()
     @IsNotEmpty()
     @MaxLength(150, { message: "El nombre supera el limite de 150 caracteres" })
     @ApiProperty({ description: 'El nombre de usuario', default: 'John Doe' })
-    readonly name: string;
+    name: string;
 
     /* (mínimo 8 caracteres, mayúsculas, minúsculas y símbolos) */
     @IsString()
@@ -45,5 +45,5 @@ export class SignUpDto {
         message: 'La contraseña debe tener al menos una mayúscula, una minúscula y un símbolo'
     })
     @ApiProperty({ description: 'La contraseña', pattern: 'pass[a-z][A-Z]#{4}' })
-    readonly password: string;
+    password: string;
 }
