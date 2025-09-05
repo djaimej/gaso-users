@@ -8,6 +8,9 @@ import { CreateUserDto, FilterUsersDto, UpdateUserDto, UserResponseDto } from '.
 import { User } from './entities/user.entity';
 import { ApiBearerAuth, ApiBody, ApiCookieAuth, ApiHeader, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { HttpExceptionFilter, QueryErrorFilter } from '@filters/index';
+import { ConfigurationEnum } from '@config/config.enum';
+
+const requiredCSRF = process.env[ConfigurationEnum.NODE_ENV] !== 'testing-e2e';
 
 @ApiTags('usuarios')
 @ApiBearerAuth()
@@ -24,7 +27,7 @@ export class UsersController {
   @Post()
   @Roles([Role.ADMIN]) /* Asignación de permisos solo admin */
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
-  @ApiHeader({ name: 'X-CSRF-Token', description: 'Token CSRF obtenido de /auth/csrf-token', required: true })
+  @ApiHeader({ name: 'X-CSRF-Token', description: 'Token CSRF obtenido de /auth/csrf-token', required: requiredCSRF })
   @ApiOperation({ summary: 'Crear un nuevo usuario', description: 'Crea un nuevo usuario en el sistema. Requiere permisos de administrador.' })
   @ApiResponse({ status: 201, description: 'Usuario creado exitosamente', type: User })
   @ApiResponse({ status: 400, description: 'Datos de entrada inválidos' })
@@ -75,7 +78,7 @@ export class UsersController {
   @Put(':id')
   @Roles([Role.ADMIN])
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
-  @ApiHeader({ name: 'X-CSRF-Token', description: 'Token CSRF obtenido de /auth/csrf-token', required: true })
+  @ApiHeader({ name: 'X-CSRF-Token', description: 'Token CSRF obtenido de /auth/csrf-token', required: requiredCSRF })
   @ApiOperation({ summary: 'Actualizar usuario completo', description: 'Actualiza todos los campos de un usuario específico. Requiere permisos de administrador.' })
   @ApiParam({ name: 'id', description: 'ID único del usuario a actualizar', type: String })
   @ApiResponse({ status: 200, description: 'Usuario actualizado correctamente', type: User })
@@ -121,7 +124,7 @@ export class UsersController {
    */
   @Patch()
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
-  @ApiHeader({ name: 'X-CSRF-Token', description: 'Token CSRF obtenido de /auth/csrf-token', required: true })
+  @ApiHeader({ name: 'X-CSRF-Token', description: 'Token CSRF obtenido de /auth/csrf-token', required: requiredCSRF })
   @ApiOperation({ summary: 'Actualización parcial del usuario actual', description: 'Actualiza parcialmente los datos del usuario autenticado.' })
   @ApiResponse({ status: 200, description: 'Usuario actualizado correctamente', type: User })
   @ApiResponse({ status: 400, description: 'Datos de entrada inválidos' })
@@ -139,7 +142,7 @@ export class UsersController {
   @Patch(':id')
   @Roles([Role.ADMIN])
   @UsePipes(new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true }))
-  @ApiHeader({ name: 'X-CSRF-Token', description: 'Token CSRF obtenido de /auth/csrf-token', required: true })
+  @ApiHeader({ name: 'X-CSRF-Token', description: 'Token CSRF obtenido de /auth/csrf-token', required: requiredCSRF })
   @ApiOperation({ summary: 'Actualización parcial de usuario por ID', description: 'Actualiza parcialmente los datos de un usuario específico. Requiere permisos de administrador.' })
   @ApiParam({ name: 'id', description: 'ID único del usuario a actualizar', type: String })
   @ApiResponse({ status: 200, description: 'Usuario actualizado correctamente', type: User })
@@ -157,7 +160,7 @@ export class UsersController {
    */
   @Delete(':id')
   @Roles([Role.ADMIN])
-  @ApiHeader({ name: 'X-CSRF-Token', description: 'Token CSRF obtenido de /auth/csrf-token', required: true })
+  @ApiHeader({ name: 'X-CSRF-Token', description: 'Token CSRF obtenido de /auth/csrf-token', required: requiredCSRF })
   @ApiOperation({ summary: 'Eliminar usuario', description: 'Elimina un usuario del sistema. Requiere permisos de administrador.' })
   @ApiParam({ name: 'id', description: 'ID único del usuario a eliminar', type: String })
   @ApiResponse({ status: 200, description: 'Usuario eliminado exitosamente' })

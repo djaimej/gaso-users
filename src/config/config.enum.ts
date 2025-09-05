@@ -8,7 +8,7 @@ export enum ConfigurationEnum {
     DATABASE_PASSWORD = 'POSTGRES_PASSWORD',
     JWT_SECRET = 'JWT_SECRET',
     ADM_SECRET = 'ADM_SECRET',
-    NODE_ENV = 'NODE_ENV', // development | production | testing
+    NODE_ENV = 'NODE_ENV', // development | production | testing | testing-e2e
     FRONTEND_URL = 'FRONTEND_URL',
     SESSION_SECRET = 'SESSION_SECRET',
     COOKIE_SECRET = 'COOKIE_SECRET',

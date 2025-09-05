@@ -10,12 +10,13 @@ import { Role } from '@common/enums/role.enum';
 import { UserResponseDto } from '@resources/users/dto/user.dto';
 
 /* 
-  IMPORTANTE: Antes de ejecutar estas pruebas es necesario especificar el entorno a testing en .env 
+  IMPORTANTE: Antes de ejecutar estas pruebas es necesario especificar el entorno a testing-e2e en .env 
   NODE_ENV=testing
   esto saltara la parte de XSRF
 */
 
 describe('App Pruebas de integración', () => {
+  process.env.NODE_ENV = 'testing-e2e';
   let app: INestApplication<App>;
   let authToken: string;
   let testUser: SignUpDto;

@@ -8,7 +8,7 @@ import { ConfigurationEnum } from '@config/config.enum';
 export const generateSecret = () => randomBytes(32).toString('hex');
 
 // Configuración de CSRF
-const { generateCsrfToken, doubleCsrfProtection } = doubleCsrf({
+const { doubleCsrfProtection } = doubleCsrf({
     getSecret: (req: Request) => {
         if (!req.session.csrfSecret) {
             req.session.csrfSecret = generateSecret();
@@ -43,5 +43,3 @@ export class CsrfMiddleware implements NestMiddleware {
         });
     }
 }
-
-export { generateCsrfToken, doubleCsrfProtection };

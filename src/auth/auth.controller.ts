@@ -1,12 +1,11 @@
 import { Body, Controller, Get, InternalServerErrorException, Param, Post, Req, Res } from "@nestjs/common";
-import express from "express";
 import { Public } from "@decorators/public.decorator";
 import { AuthService } from "./auth.service";
 import { LogInDto } from "./dto/login.dto";
 import { SignInDto, SignUpDto } from "./dto/sign.dto";
 import { ApiBody, ApiOperation, ApiParam, ApiResponse, ApiTags } from "@nestjs/swagger";
-import { generateCsrfToken } from "@middlewares/csrf.middleware";
 import { ConfigService } from "@nestjs/config";
+import express from "express";
 
 @Public()
 @ApiTags('auth')
@@ -58,7 +57,7 @@ export class AuthController {
     @ApiResponse({ status: 500, description: 'Error interno del servidor' })
     getCsrfToken(@Req() req: express.Request, @Res({ passthrough: true }) res: express.Response) {
         try {
-            const token = generateCsrfToken(req, res);
+            const token = req.csrfToken ? req.csrfToken() : 'fallback-token';
             return { csrfToken: token };
         } catch (error) {
             throw new InternalServerErrorException('Error generando token CSRF');
