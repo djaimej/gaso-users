@@ -1,11 +1,11 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { AuthController } from './auth.controller';
-import { AuthService } from './auth.service';
-import { LogInDto } from './dto/login.dto';
-import { SignInDto, SignUpDto } from './dto/sign.dto';
-import { Role } from '@common/enums/role.enum';
-import { ConfigService } from '@nestjs/config';
-import { InternalServerErrorException } from '@nestjs/common';
+import { Test, TestingModule } from "@nestjs/testing";
+import { AuthController } from "./auth.controller";
+import { AuthService } from "./auth.service";
+import { LogInDto } from "./dto/login.dto";
+import { SignInDto, SignUpDto } from "./dto/sign.dto";
+import { Role } from "@common/enums/role.enum";
+import { ConfigService } from "@nestjs/config";
+import { InternalServerErrorException } from "@nestjs/common";
 
 
 describe('AuthController', () => {

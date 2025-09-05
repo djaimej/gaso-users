@@ -1,16 +1,16 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
-import { AuthService } from './auth.service';
-import { UsersService } from '@resources/users/users.service';
-import { SignInDto, SignUpDto } from './dto/sign.dto';
-import { LogInDto } from './dto/login.dto';
-import { User } from '@resources/users/entities/user.entity';
-import { Role } from '@common/enums/role.enum';
-import { NotFoundException, UnauthorizedException, BadRequestException, ImATeapotException, ForbiddenException } from '@nestjs/common';
-import { compare } from 'bcrypt';
-import { plainToClass } from 'class-transformer';
-import { ConfigurationEnum } from '@config/config.enum';
+import { Test, TestingModule } from "@nestjs/testing";
+import { JwtService } from "@nestjs/jwt";
+import { ConfigService } from "@nestjs/config";
+import { AuthService } from "./auth.service";
+import { UsersService } from "@resources/users/users.service";
+import { SignInDto, SignUpDto } from "./dto/sign.dto";
+import { LogInDto } from "./dto/login.dto";
+import { User } from "@resources/users/entities/user.entity";
+import { Role } from "@common/enums/role.enum";
+import { NotFoundException, UnauthorizedException, BadRequestException, ImATeapotException, ForbiddenException } from "@nestjs/common";
+import { compare } from "bcrypt";
+import { plainToClass } from "class-transformer";
+import { ConfigurationEnum } from "@config/config.enum";
 
 // Mocks
 

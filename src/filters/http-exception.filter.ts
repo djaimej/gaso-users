@@ -1,8 +1,8 @@
 
-import { httpErrorCodes } from '@common/consts/error';
-import { IResponse } from '@common/interfaces/response.interface';
-import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from '@nestjs/common';
-import { Response } from 'express';
+import { httpErrorCodes } from "@common/consts/error";
+import { IResponse } from "@common/interfaces/response.interface";
+import { ExceptionFilter, Catch, ArgumentsHost, HttpException } from "@nestjs/common";
+import { Response } from "express";
 
 @Catch(HttpException)
 export class HttpExceptionFilter implements ExceptionFilter {

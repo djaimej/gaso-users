@@ -1,12 +1,12 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { UsersService } from './users.service';
-import { getRepositoryToken } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { Repository } from 'typeorm';
-import { BadRequestException, ConflictException, NotFoundException } from '@nestjs/common';
-import { CreateUserDto, UpdateUserDto } from './dto/user.dto';
-import { Role } from '@common/enums/role.enum';
-import bcrypt from 'bcrypt';
+import { Test, TestingModule } from "@nestjs/testing";
+import { UsersService } from "./users.service";
+import { getRepositoryToken } from "@nestjs/typeorm";
+import { User } from "./entities/user.entity";
+import { Repository } from "typeorm";
+import { BadRequestException, ConflictException, NotFoundException } from "@nestjs/common";
+import { CreateUserDto, UpdateUserDto } from "./dto/user.dto";
+import { Role } from "@common/enums/role.enum";
+import bcrypt from "bcrypt";
 
 jest.mock('bcrypt', () => ({ hash: jest.fn() }));
 

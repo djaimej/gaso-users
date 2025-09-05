@@ -1,16 +1,16 @@
-import { Controller, Request, Get, Post, Body, Patch, Param, Delete, UseGuards, UseFilters, Put, Query, UsePipes, ValidationPipe } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { AuthGuard } from '@nestjs/passport';
-import { Role } from '@common/enums/role.enum';
-import { IAccessTokenPayload } from '@common/interfaces/access-token-payload.interface';
-import { Roles } from '@decorators/role.decorator';
-import { CreateUserDto, FilterUsersDto, UpdateUserDto, UserResponseDto } from './dto/user.dto';
-import { User } from './entities/user.entity';
-import { ApiBearerAuth, ApiBody, ApiCookieAuth, ApiHeader, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { HttpExceptionFilter, QueryErrorFilter } from '@filters/index';
-import { ConfigurationEnum } from '@config/config.enum';
+import { Controller, Request, Get, Post, Body, Patch, Param, Delete, UseGuards, UseFilters, Put, Query, UsePipes, ValidationPipe } from "@nestjs/common";
+import { UsersService } from "./users.service";
+import { AuthGuard } from "@nestjs/passport";
+import { Role } from "@common/enums/role.enum";
+import { IAccessTokenPayload } from "@common/interfaces/access-token-payload.interface";
+import { Roles } from "@decorators/role.decorator";
+import { CreateUserDto, FilterUsersDto, UpdateUserDto, UserResponseDto } from "./dto/user.dto";
+import { User } from "./entities/user.entity";
+import { ApiBearerAuth, ApiBody, ApiCookieAuth, ApiHeader, ApiOperation, ApiParam, ApiQuery, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { HttpExceptionFilter, QueryErrorFilter } from "@filters/index";
+import { ConfigurationEnum } from "@config/config.enum";
 
-const requiredCSRF = process.env[ConfigurationEnum.NODE_ENV] !== 'testing-e2e';
+const requiredCSRF = process.env[ConfigurationEnum.NODE_ENV] !== "testing-e2e";
 
 @ApiTags('usuarios')
 @ApiBearerAuth()

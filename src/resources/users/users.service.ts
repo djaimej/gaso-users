@@ -1,8 +1,8 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from '@nestjs/common';
-import { CreateUserDto, UpdateUserDto, UserResponseDto, UserWithPasswordDto } from './dto/user.dto';
-import { User } from './entities/user.entity';
-import { FindOptionsOrder, FindOptionsWhere, ILike, Repository } from 'typeorm';
-import { InjectRepository } from '@nestjs/typeorm';
+import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { CreateUserDto, UpdateUserDto, UserResponseDto, UserWithPasswordDto } from "./dto/user.dto";
+import { User } from "./entities/user.entity";
+import { FindOptionsOrder, FindOptionsWhere, ILike, Repository } from "typeorm";
+import { InjectRepository } from "@nestjs/typeorm";
 import { hash } from "bcrypt";
 
 @Injectable()

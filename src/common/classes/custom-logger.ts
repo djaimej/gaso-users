@@ -1,5 +1,5 @@
 // src/common/custom-logger.ts
-import { ConsoleLogger } from '@nestjs/common';
+import { ConsoleLogger } from "@nestjs/common";
 
 export class CustomLogger extends ConsoleLogger {
   constructor(context?: string) {

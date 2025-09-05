@@ -1,10 +1,10 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { UsersController } from './users.controller';
-import { UsersService } from './users.service';
-import { CreateUserDto, UpdateUserDto, FilterUsersDto } from './dto/user.dto';
-import { User } from './entities/user.entity';
-import { Role } from '@common/enums/role.enum';
-import { BadRequestException, ValidationPipe } from '@nestjs/common';
+import { Test, TestingModule } from "@nestjs/testing";
+import { UsersController } from "./users.controller";
+import { UsersService } from "./users.service";
+import { CreateUserDto, UpdateUserDto, FilterUsersDto } from "./dto/user.dto";
+import { User } from "./entities/user.entity";
+import { Role } from "@common/enums/role.enum";
+import { BadRequestException, ValidationPipe } from "@nestjs/common";
 
 describe('UsersController', () => {
   let controller: UsersController;
