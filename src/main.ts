@@ -1,16 +1,16 @@
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
-import { ConfigurationEnum } from '@config/config.enum';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { NextFunction, Request, Response } from 'express';
+import { NestFactory } from "@nestjs/core";
+import { AppModule } from "./app.module";
+import { ValidationPipe } from "@nestjs/common";
+import { ConfigurationEnum } from "@config/config.enum";
+import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
+import { NextFunction, Request, Response } from "express";
+import { CsrfMiddleware } from "@middlewares/csrf.middleware";
+import { CustomLogger } from "@common/classes/custom-logger";
 import session from "express-session";
-import cookieParser from 'cookie-parser';
-import helmet from 'helmet';
-import rateLimit from 'express-rate-limit';
-import compression from 'compression';
-import { CsrfMiddleware } from '@middlewares/csrf.middleware';
-import { CustomLogger } from '@common/classes/custom-logger';
+import cookieParser from "cookie-parser";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
+import compression from "compression";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -28,20 +28,18 @@ async function bootstrap() {
   const currentEnv = process.env[ConfigurationEnum.NODE_ENV] || 'development';
   const isTesting = currentEnv === 'testing';
 
-  // Solo aplicar rate limiting global en producción/desarrollo
+  // Solo aplicar rate limiting global en producción/desarrollo/pruebas-e2e
   if (!isTesting) {
     app.use(
       rateLimit({
         windowMs: 15 * 60 * 1000, // 15 minutos
         max: 1000, // límite por IP
-        message: { error: 'Too many requests', message: 'Please try again later' },
+        message: { error: 'Demasiadas solicitudes', message: 'Por favor, inténtelo de nuevo más tarde' },
         standardHeaders: true,
         legacyHeaders: false,
       })
     );
-  } else {
-    console.log('TESTING MODE: rate limiting global deshabilitado');
-  }
+  } else { console.log('TESTING MODE: rate limiting global deshabilitado'); }
 
   app.use(compression());
 

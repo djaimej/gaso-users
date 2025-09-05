@@ -1,3 +1,3 @@
-import 'reflect-metadata';
-export * from './jwt.guard';
-export * from './role.guard';
+import "reflect-metadata";
+export * from "./jwt.guard";
+export * from "./role.guard";

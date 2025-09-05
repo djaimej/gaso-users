@@ -1,13 +1,13 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import request from 'supertest';
-import { App } from 'supertest/types';
-import { AppModule } from '../src/app.module';
-import { SignUpDto } from '@auth/dto/sign.dto';
-import { IResponse } from '@common/interfaces/response.interface';
-import { LogInDto } from '@auth/dto/login.dto';
-import { Role } from '@common/enums/role.enum';
-import { UserResponseDto } from '@resources/users/dto/user.dto';
+import { Test, TestingModule } from "@nestjs/testing";
+import { INestApplication } from "@nestjs/common";
+import request from "supertest";
+import { App } from "supertest/types";
+import { AppModule } from "../src/app.module";
+import { SignUpDto } from "@auth/dto/sign.dto";
+import { IResponse } from "@common/interfaces/response.interface";
+import { LogInDto } from "@auth/dto/login.dto";
+import { Role } from "@common/enums/role.enum";
+import { UserResponseDto } from "@resources/users/dto/user.dto";
 
 /* 
   IMPORTANTE: Antes de ejecutar estas pruebas es necesario especificar el entorno a testing-e2e en .env 

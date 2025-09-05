@@ -1,8 +1,8 @@
 // csrf.interceptor.ts - VERSION CORREGIDA
-import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from '@nestjs/common';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import sanitizeHtml from 'sanitize-html';
+import { Injectable, NestInterceptor, ExecutionContext, CallHandler } from "@nestjs/common";
+import { Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import sanitizeHtml from "sanitize-html";
 
 @Injectable()
 export class CsrfInterceptor implements NestInterceptor {

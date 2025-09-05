@@ -1,5 +1,5 @@
-import { validate } from 'class-validator';
-import { SignInDto, SignUpDto } from './sign.dto';
+import { validate } from "class-validator";
+import { SignInDto, SignUpDto } from "./sign.dto";
 
 describe('Validación de inicio de sesión y registro', () => {
   // Casos de prueba comunes para ambos DTOs

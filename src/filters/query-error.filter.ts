@@ -1,9 +1,9 @@
 
-import { ExceptionFilter, Catch, ArgumentsHost, HttpStatus } from '@nestjs/common';
-import { Response } from 'express';
-import { QueryFailedError } from 'typeorm';
-import { DatabaseError } from 'pg-protocol';
-import { dbError, dbErrorCodes } from '@common/consts/error';
+import { ExceptionFilter, Catch, ArgumentsHost, HttpStatus } from "@nestjs/common";
+import { Response } from "express";
+import { QueryFailedError } from "typeorm";
+import { DatabaseError } from "pg-protocol";
+import { dbError, dbErrorCodes } from "@common/consts/error";
 
 @Catch(QueryFailedError<DatabaseError>)
 export class QueryErrorFilter implements ExceptionFilter {

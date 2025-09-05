@@ -1,11 +1,18 @@
-import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
-import { doubleCsrf } from 'csrf-csrf';
-import { randomBytes } from 'crypto';
-import { ConfigurationEnum } from '@config/config.enum';
+import { Injectable, NestMiddleware } from "@nestjs/common";
+import { Request, Response, NextFunction } from "express";
+import { doubleCsrf } from "csrf-csrf";
+import { randomBytes } from "crypto";
+import { ConfigurationEnum } from "@config/config.enum";
 
 // Función para generar una clave secreta aleatoria
 export const generateSecret = () => randomBytes(32).toString('hex');
+
+// Rutas excluidas de CSRF
+const EXCLUDED_ROUTES = [
+    { path: '/auth/sign-in', method: 'POST' },
+    { path: '/auth/sign-up', method: 'POST' },
+    { path: '/auth/admin/:secret', method: 'POST' }
+];
 
 // Configuración de CSRF
 const { doubleCsrfProtection } = doubleCsrf({
@@ -32,12 +39,29 @@ const { doubleCsrfProtection } = doubleCsrf({
 @Injectable()
 export class CsrfMiddleware implements NestMiddleware {
     use(req: Request, res: Response, next: NextFunction) {
+        // Verificar si la ruta está excluida
+        const isExcluded = EXCLUDED_ROUTES.some(route => {
+            const pathMatches = (requestPath: string, routePath: string): boolean => {
+                const requestParts = requestPath.split('/').filter(Boolean);
+                const routeParts = routePath.split('/').filter(Boolean);
+
+                if (requestParts.length !== routeParts.length) { return false; }
+                for (let i = 0; i < routeParts.length; i++) {
+                    if (routeParts[i].startsWith(':')) { continue; }
+                    if (routeParts[i] !== requestParts[i]) { return false; }
+                }
+                return true;
+            }
+            const methodMatches = route.method ? req.method === route.method : true;
+            return pathMatches(req.path, route.path) && methodMatches;
+        });
+
+        if (isExcluded) { return next(); }
+
+
         doubleCsrfProtection(req, res, (err: unknown) => {
             if (err) {
-                return res.status(403).json({
-                    message: 'Token CSRF inválido',
-                    error: 'CSRF_TOKEN_INVALID'
-                });
+                return res.status(403).json({ message: 'Token CSRF inválido', error: 'CSRF_TOKEN_INVALID' });
             }
             next();
         });

@@ -1,6 +1,6 @@
-import { validate } from 'class-validator';
-import { CreateUserDto } from './user.dto';
-import { Role } from '@common/enums/role.enum';
+import { validate } from "class-validator";
+import { CreateUserDto } from "./user.dto";
+import { Role } from "@common/enums/role.enum";
 
 describe('CreateUserDto', () => {
   it('Debe validar el DTO correcto', async () => {

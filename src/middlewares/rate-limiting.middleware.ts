@@ -1,7 +1,7 @@
-import { ConfigurationEnum } from '@config/config.enum';
-import { Injectable, NestMiddleware } from '@nestjs/common';
-import { Request, Response, NextFunction } from 'express';
-import rateLimit from 'express-rate-limit';
+import { ConfigurationEnum } from "@config/config.enum";
+import { Injectable, NestMiddleware } from "@nestjs/common";
+import { Request, Response, NextFunction } from "express";
+import rateLimit from "express-rate-limit";
 
 const rateLimitConfigs = {
   testing: {
