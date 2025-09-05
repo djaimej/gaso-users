@@ -106,3 +106,38 @@ npm test -- users.service.spec.ts
 # Ejecutar en modo watch
 npm run test:watch
 ```
+
+## Pruebas de estrés y rendimiento.
+
+para realizar las pruebas de de estrés y rendimiento es necesario tener k6 instalado:
+
+```bash
+# Windows (con Chocolatey)
+choco install k6
+
+# macOS (con Homebrew)
+brew install k6
+
+# Linux (Ubuntu/Debian)
+sudo apt-get install k6
+# O descargar desde: https://k6.io/docs/get-started/installation/
+```
+
+Ejecución de pruebas
+
+```bash
+# 1. Prueba de concurrencia (1000 usuarios)
+k6 run load-test/concurrent-test.js
+# Nota: Hay que establecer el bearerToken en el archivo
+
+# 2. Ataque de fuerza bruta
+k6 run load-test/brute-force-test.js
+
+# 3. Prueba de estrés general
+k6 run load-test/stress-test.js
+
+# 4. Con output detallado
+k6 run --out json=test_results.json load-test/concurrent-test.js
+```
+
+> Para estas pruebas establecer NODE_ENV=testing en las variables de entorno .env

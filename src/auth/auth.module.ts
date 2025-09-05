@@ -7,6 +7,7 @@ import { ConfigurationEnum } from '@config/config.enum';
 import { UsersModule } from '@resources/users/users.module';
 import { PassportModule } from '@nestjs/passport';
 import { JwtStrategy } from '@strategies/jwt.strategy';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -14,7 +15,14 @@ import { JwtStrategy } from '@strategies/jwt.strategy';
     forwardRef(() => UsersModule),
     JwtModule.registerAsync({
       global: true,
-      imports: [ConfigModule],
+      imports: [
+        CacheModule.register({
+          isGlobal: true,
+          ttl: 5000, // 5 segundos
+          max: 100,
+        }),
+        ConfigModule
+      ],
       useFactory: async (configService: ConfigService) => ({
         secret: configService.get<string>(ConfigurationEnum.JWT_SECRET),
         signOptions: {
@@ -28,4 +36,4 @@ import { JwtStrategy } from '@strategies/jwt.strategy';
   providers: [AuthService, JwtStrategy],
   exports: [AuthService, JwtModule],
 })
-export class AuthModule {}
+export class AuthModule { }

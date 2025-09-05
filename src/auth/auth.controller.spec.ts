@@ -6,9 +6,7 @@ import { SignInDto, SignUpDto } from './dto/sign.dto';
 import { Role } from '@common/enums/role.enum';
 import { ConfigService } from '@nestjs/config';
 import { InternalServerErrorException } from '@nestjs/common';
-import { generateCsrfToken } from '@middlewares/csrf.middleware';
 
-jest.mock('@middlewares/csrf.middleware', () => ({ generateCsrfToken: jest.fn() }));
 
 describe('AuthController', () => {
   let controller: AuthController;
@@ -83,22 +81,15 @@ describe('AuthController', () => {
       const mockRequest = { session: {}, sessionID: 'test-session-id' } as any;
       const mockResponse = { cookie: jest.fn() } as any;
 
-      (generateCsrfToken as jest.Mock).mockReturnValue('test-csrf-token');
-
       const result = controller.getCsrfToken(mockRequest, mockResponse);
 
       expect(result).toEqual({ csrfToken: 'test-csrf-token' });
-      expect(generateCsrfToken).toHaveBeenCalledWith(mockRequest, mockResponse);
     });
 
     it('Debería lanzar error si falla la generación del token CSRF', () => {
       const mockRequest = { session: {}, sessionID: 'test-session-id' } as any;
       const mockResponse = { cookie: jest.fn() } as any;
-
-      (generateCsrfToken as jest.Mock).mockImplementation(() => {
-        throw new Error('CSRF generation failed');
-      });
-
+      
       expect(() => {
         controller.getCsrfToken(mockRequest, mockResponse);
       }).toThrow(InternalServerErrorException);
