@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ConsoleLogger, ValidationPipe } from '@nestjs/common';
+import { ValidationPipe } from '@nestjs/common';
 import { ConfigurationEnum } from '@config/config.enum';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { NextFunction, Request, Response } from 'express';
@@ -20,7 +20,9 @@ async function bootstrap() {
     },
     bodyParser: true,
     rawBody: false,
-    logger: new CustomLogger('GASO'), // Logger personalizado
+    logger: process.env.NODE_ENV === 'development'
+      ? new CustomLogger('GASO')
+      : ['error', 'warn'], // Solo errores y warnings en producción
   });
 
   const currentEnv = process.env[ConfigurationEnum.NODE_ENV] || 'development';
@@ -124,6 +126,8 @@ async function bootstrap() {
   const port = process.env[ConfigurationEnum.PORT] ?? 3000;
   await app.listen(port);
   
+  console.log(`Modo: ${process.env.NODE_ENV || 'development'}`);
+  console.log(`Logging: ${process.env.NODE_ENV === 'development' ? 'DETALLADO' : 'SOLO ERRORES'}`);
   console.log(`🚀 Aplicación ejecutándose en el puerto ${port}`);
   if (isTesting) {
     console.log('TESTING MODE: Rate limiting relaxed');
@@ -131,7 +135,7 @@ async function bootstrap() {
   if (!isTesting) {
     console.log(`Documentación: http://localhost:${port}/api-docs`);
     if (currentEnv === 'testing-e2e') {
-    console.log('TESTING E2E');
+      console.log('TESTING E2E');
     }
   }
 }
